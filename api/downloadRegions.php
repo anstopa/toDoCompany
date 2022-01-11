@@ -8,8 +8,8 @@ if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_row($result)) {
         $table_data[] = array(
             'id' => $row[0],
-            'region_name' => $row[1],
-            'assembler' => $row[2]
+            'assembler_id' => $row[1],
+            'region_name' => $row[2]
         );
     }
 }

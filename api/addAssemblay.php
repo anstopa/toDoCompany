@@ -1,10 +1,8 @@
-
-
 <?php
 include 'connection.php';
 
 $date = date('Y-m-d');
-echo $phpDate;
+// echo $phpDate;
 
 
 $region = $_REQUEST['region'];
@@ -20,7 +18,7 @@ if ($db === false) {
 
 
 
-$query = "INSERT INTO montaze ( region_id, date, name, address, tel_number, bok_note) VALUES ('$region','$date','$name', '$address', '$tel' , '$bok_note')";
+$query = "INSERT INTO assemblies ( region_id, date, name, address, tel_number, bok_note) VALUES ('$region','$date','$name', '$address', '$tel' , '$bok_note')";
 
 if (mysqli_query($db, $query)) {
     echo "<h3>Success</h3>";
@@ -33,4 +31,3 @@ if (mysqli_query($db, $query)) {
 }
 
 mysqli_close($db);
-?>

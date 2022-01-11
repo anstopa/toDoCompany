@@ -101,11 +101,14 @@ async function getRegions() {
 
 async function renderRegions() {
     let regions = await getRegions();
-    let html = '';
-    let htmlModal = '';
+    let html = '<option >---WYBIERZ---</option>';
+    let htmlModal = '<option >---WYBIERZ---</option>';
     regions.forEach(region => {
         let options =
-            `<div>
+            `
+            
+            <div>
+            
         <option value='${region.id}' >${region.region_name}</option>    
         </div>`;
         let modalOptions =

@@ -1,7 +1,22 @@
 <?php
-$host = "localhost";
-$user = "root";
-$password = "Zxc!23zxc";
-$databaseName = "montaze";
+// require_once realpath("./" . __DIR__ . "/vendor/autoload.php");
+echo __LINE__;
 
-$db =  mysqli_connect($host, $user, $password, $databaseName);
+// use Dotenv\Dotenv;
+
+// $dotenv = Dotenv::createImmutable(__DIR__);
+// $dotenv->load();
+require './vendor/autoload.php';
+
+use Dotenv\Dotenv;
+
+$dotenv = Dotenv::createImmutable('./');
+$dotenv->load();
+
+
+
+$db =  mysqli_connect($host, $user, $password, $databaseName, $dbport);
+// if (!$db) {
+//     die('Could not connect: ' . mysqli_connect_error());
+// }
+// echo 'Connection succesfully';

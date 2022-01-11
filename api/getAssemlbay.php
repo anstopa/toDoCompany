@@ -4,7 +4,7 @@ include 'connection.php';
 $id = $_GET['region_id'];
 
 
-$query = "SELECT * FROM montaze where region_id = '$id'";
+$query = "SELECT * FROM assemblies where region_id = '$id'";
 $result = mysqli_query($db, $query);
 
 if ($db === false) {
@@ -14,7 +14,7 @@ if ($db === false) {
 
 if (mysqli_num_rows($result) > 0) {
     while ($row = mysqli_fetch_row($result)) {
-        $tabel_assemblay_data[] = array(
+        $table_assemblay_data[] = array(
             'id' => $row[0],
             'region_id' => $row[1],
             'date' => $row[2],
@@ -26,7 +26,7 @@ if (mysqli_num_rows($result) > 0) {
         );
     }
 }
-echo json_encode($tabel_assemblay_data);
+echo json_encode($table_assemblay_data);
 
 // var_dump($singleRow);
 // while ($row = mysqli_fetch_array($result)) {
