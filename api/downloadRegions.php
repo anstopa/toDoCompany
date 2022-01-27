@@ -1,6 +1,6 @@
 <?php
 
-include 'connection.php';
+include '../connection.php';
 
 
 $result = mysqli_query($db, "SELECT * FROM regions");

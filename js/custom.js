@@ -1,14 +1,20 @@
+import { editOptions } from './optionsModal.js'
+import { isDone } from './doneModal.js'
+let addAssemblayForm = document.getElementById('addAssemblay');
+addAssemblayForm.addEventListener("submit", addInstallation)
 
-let exampleForm = document.getElementById('addinstalation');
-exampleForm.addEventListener("submit", addInstallation)
 
-const resetForm = () => {
-    document.getElementById('dodajMontaż').reset();
+function resetForm() {
+    document.getElementById('addAssemblay').reset();
+}
+document.getElementById('tv-checkbox').onchange = function () {
+    document.getElementById('tv-value').disabled = !this.checked;
 }
 
 
 async function addInstallation(event) {
     event.preventDefault();
+
     let form = event.target;
     let formData = new FormData(form)
     for (let key of formData.keys()) {
@@ -32,12 +38,13 @@ async function addInstallation(event) {
         let data = await response.json();
         console.log(data);
     }
+    resetForm();
 }
 document.getElementById('regions').addEventListener('change', renderAssemblay)
 
 
-async function getAssemblies(id) {
-    let url = `api/getAssemlbay.php? + region_id= ${id}`
+async function getAssemblies(region_id) {
+    let url = `api/getAssemlbay.php?+region_id=${region_id}`
     try {
         let res = await fetch(url);
         return await res.json();
@@ -48,46 +55,62 @@ async function getAssemblies(id) {
 }
 
 async function renderAssemblay() {
-    let id = this.value
-    console.log(getAssemblies(id))
-    let assemblies = await getAssemblies(id)
-    let htmlBody = '';
+    console.log(this.value)
+    let region_id = this.value
+    console.log(region_id)
+    let assemblies = await getAssemblies(region_id)
+
     let html = '';
     console.log(assemblies)
     if (assemblies != null) {
         assemblies.forEach(assemblay => {
             console.log(assemblay.name)
+            function addClass() {
+                if (assemblay.priority == 1) {
+                    return 'table-primary'
+                } else if (assemblay.priority == 2) {
+                    return 'table-warning'
+                } else {
+                    return 'table-active'
+                }
+            }
             let td =
                 `
-            <tr class="table-success">
-            <td class="text-middle" style="width:120px ">${assemblay.date}</td>
-            <td class="text-middle">${assemblay.name}</td>
-            <td class="text-middle">${assemblay.address}</td>
-            <td class="text-middle">${assemblay.tel_num}</td>
-            <td class="text-middle">${assemblay.bok_note}</td>
-            <td class="text-middle">${assemblay.ins_note}</td>
-            </tr>
+            <tr class=${addClass()} >
+            <td class= "text-middle"><small>${assemblay.date}</small></td >
+            <td class="text-middle"><small>${assemblay.name}</small></td>
+            <td class="text-middle"><small>${assemblay.address}</small></td>
+            <td class="text-middle"><small>${assemblay.tel_num}</small></td>
+            <td class="text-middle"><small>${assemblay.bok_note}</small></td>
+            <td class="text-middle"><div id="instalation_options">
+            ${assemblay.int ? '<img src="/assets/images/int.png" class="px-1"></img>' : ''}
+            ${assemblay.tv ? '<img src="/assets/images/tv.png" class="px-1" ></img>' : ''}
+            ${assemblay.tv_value > 0 ? assemblay.tv_value : ''}</div></td >
+            <td class="text-middle" ><img src="/assets/images/options.png"  class="px-1 options"  id="${assemblay.id}"><img src="/assets/images/done.png" class="px-1 done" id="${assemblay.id}"></td>
+            </tr >
             `
             html += td
         });
     } else {
         let td =
+            `<tr class= "row" >
+            <td class="col-12">BRAK MONTAŻY</td>
+        </tr >
             `
-        <tr class="row">
-        <td class="col-12">BRAK MONTAŻY</td>
-        </tr>
-        `
         html += td
     }
 
     let table = document.querySelector('tbody')
     table.innerHTML = html;
 
+
+    let assemblay_done = document.querySelectorAll('img.done')
+    let assemblay_options = document.querySelectorAll('img.options')
+
+    doneAssemblay(assemblay_done)
+    editOptions(assemblay_options)
+
 }
-
-
-
-
 
 async function getRegions() {
     let url = 'api/downloadRegions.php';
@@ -106,15 +129,15 @@ async function renderRegions() {
     regions.forEach(region => {
         let options =
             `
-            
-            <div>
-            
-        <option value='${region.id}' >${region.region_name}</option>    
-        </div>`;
+
+            < div >
+
+            <option value='${region.id}' >${region.region_name}</option>    
+        </div > `;
         let modalOptions =
-            `<div>
-    <option value='${region.id}'>${region.region_name}</option>
-    </div>`
+            `< div >
+            <option value='${region.id}'>${region.region_name}</option>
+    </div > `
         html += options
         htmlModal += modalOptions;
 
@@ -126,3 +149,13 @@ async function renderRegions() {
 }
 
 renderRegions()
+
+
+async function doneAssemblay(options) {
+    options.forEach(option => option.addEventListener('click', isDone))
+}
+
+
+
+
+

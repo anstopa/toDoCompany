@@ -1,15 +1,12 @@
 <?php
 include '../connection.php';
 
-$id = $_REQUEST['region_id'];
+$id = $_REQUEST['id'];
 
 
-$query = "SELECT * FROM assemblies 
-where region_id = '$id' 
-and isDone = false 
-ORDER BY priority DESC, date ASC";
-
+$query = "SELECT * FROM assemblies where id = '$id'";
 $result = mysqli_query($db, $query);
+
 if ($db === false) {
     die("ERROR: Could not connect. " . mysqli_connect_error());
 }
