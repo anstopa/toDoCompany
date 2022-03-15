@@ -1,6 +1,9 @@
 
 export async function editOptions(options) {
-    options.forEach(option => option.addEventListener('click', generateOptionsModal))
+    options.forEach(option => option.addEventListener('click',
+        // generateOptionsModal
+        () => { console.log('aaa') }
+    ))
 
 }
 

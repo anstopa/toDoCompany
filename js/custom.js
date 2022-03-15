@@ -1,5 +1,7 @@
 import { editOptions } from './optionsModal.js'
 import { isDone } from './doneModal.js'
+window.load_data = load_data
+
 let addAssemblayForm = document.getElementById('addAssemblay');
 addAssemblayForm.addEventListener("submit", addInstallation)
 
@@ -40,77 +42,6 @@ async function addInstallation(event) {
     }
     resetForm();
 }
-document.getElementById('regions').addEventListener('change', renderAssemblay)
-
-
-async function getAssemblies(region_id) {
-    let url = `api/getAssemlbay.php?+region_id=${region_id}`
-    try {
-        let res = await fetch(url);
-        return await res.json();
-    } catch (error) {
-        console.log(error);
-    }
-
-}
-
-async function renderAssemblay() {
-    console.log(this.value)
-    let region_id = this.value
-    console.log(region_id)
-    let assemblies = await getAssemblies(region_id)
-
-    let html = '';
-    console.log(assemblies)
-    if (assemblies != null) {
-        assemblies.forEach(assemblay => {
-            console.log(assemblay.name)
-            function addClass() {
-                if (assemblay.priority == 1) {
-                    return 'table-primary'
-                } else if (assemblay.priority == 2) {
-                    return 'table-warning'
-                } else {
-                    return 'table-active'
-                }
-            }
-            let td =
-                `
-            <tr class=${addClass()} >
-            <td class= "text-middle"><small>${assemblay.date}</small></td >
-            <td class="text-middle"><small>${assemblay.name}</small></td>
-            <td class="text-middle"><small>${assemblay.address}</small></td>
-            <td class="text-middle"><small>${assemblay.tel_num}</small></td>
-            <td class="text-middle"><small>${assemblay.bok_note}</small></td>
-            <td class="text-middle"><div id="instalation_options">
-            ${assemblay.int ? '<img src="/assets/images/int.png" class="px-1"></img>' : ''}
-            ${assemblay.tv ? '<img src="/assets/images/tv.png" class="px-1" ></img>' : ''}
-            ${assemblay.tv_value > 0 ? assemblay.tv_value : ''}</div></td >
-            <td class="text-middle" ><img src="/assets/images/options.png"  class="px-1 options"  id="${assemblay.id}"><img src="/assets/images/done.png" class="px-1 done" id="${assemblay.id}"></td>
-            </tr >
-            `
-            html += td
-        });
-    } else {
-        let td =
-            `<tr class= "row" >
-            <td class="col-12">BRAK MONTAŻY</td>
-        </tr >
-            `
-        html += td
-    }
-
-    let table = document.querySelector('tbody')
-    table.innerHTML = html;
-
-
-    let assemblay_done = document.querySelectorAll('img.done')
-    let assemblay_options = document.querySelectorAll('img.options')
-
-    doneAssemblay(assemblay_done)
-    editOptions(assemblay_options)
-
-}
 
 async function getRegions() {
     let url = 'api/downloadRegions.php';
@@ -124,8 +55,8 @@ async function getRegions() {
 
 async function renderRegions() {
     let regions = await getRegions();
-    let html = '<option >---WYBIERZ---</option>';
-    let htmlModal = '<option >---WYBIERZ---</option>';
+    let html = '<option value=0 >---WYBIERZ---</option>';
+    let htmlModal = '<option value = 0 >---WYBIERZ---</option>';
     regions.forEach(region => {
         let options =
             `
@@ -152,10 +83,76 @@ renderRegions()
 
 
 async function doneAssemblay(options) {
-    options.forEach(option => option.addEventListener('click', isDone))
+    options.forEach(option => option.addEventListener('click',
+        //  isDone
+        console.log('aaa')
+    ))
 }
 
 
+function load_data(query = '', page_number = 1) {
+    let form_data = new FormData();
+    form_data.append('query', query)
+    form_data.append('page', page_number)
+
+    const url = 'api/process_data.php'
+    fetch(
+        url, {
+        method: 'POST',
+        dataType: 'multipart/form-data',
+        body: form_data,
+    }).then(response => response.json())
+        .then(data => {
+            let html = ''
+
+            if (data.data.length > 0) {
+                data.data.forEach(data => {
+                    function addClass() {
+                        if (data.priority == 1) {
+                            return 'table-primary'
+                        } else if (data.priority == 2) {
+                            return 'table-warning'
+                        } else {
+                            return 'table-active'
+                        }
+                    }
+                    let td =
+                        `
+                    <tr class=${addClass()} >
+                    <td class= "text-middle"><small>${data.date}</small></td >
+                    <td class="text-middle"><small>${data.name}</small></td>
+                    <td class="text-middle"><small>${data.address}</small></td>
+                    <td class="text-middle"><small>${data.tel_num}</small></td>
+                    <td class="text-middle"><small>${data.bok_note}</small></td>
+                     <td class="text-middle"><div id="instalation_options">
+                     ${data.int ? '<img src="/assets/images/int.png" class="px-1"></img>' : ''}
+                     ${data.tv ? '<img src="/assets/images/tv.png" class="px-1" ></img>' : ''}
+                     ${data.tv_value > 0 ? data.tv_value : ''}</div></td >
+                     <td class="text-middle" ><img src="/assets/images/options.png"  class="px-1 options"  id="${data.id}"><img src="/assets/images/done.png" class="px-1 done" id="${data.id}"></td>
+                     </tr >
+                     `
+                    html += td
+                })
+
+            } else {
+                let td =
+                    `<tr class= "row" >
+                                    <td class="col-12">BRAK MONTAŻY</td>
+                                </tr >
+                                    `
+                html += td
+            }
+            let table = document.querySelector('tbody')
+            table.innerHTML = html;
+            document.getElementById('pagination_link').innerHTML = data.pagination
 
 
+        })
+
+}
+
+
+load_data()
+let searchValue = document.getElementById('searchBar')
+searchValue.addEventListener('keyup', (e) => load_data(e.target.value))
 

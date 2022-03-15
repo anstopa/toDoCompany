@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang=pl">
+<html lang="pl">
 
 <head>
     <meta charset="UTF-8">
@@ -13,7 +13,7 @@
         integrity="sha384-QokYePQSOwpBDuhlHOsX0ymF6R/vLk/UQVz3WHa6wygxI5oGTmDTv8wahFOSspdm" crossorigin="anonymous">
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.1/css/fontawesome.css"
         integrity="sha384-vd1e11sR28tEK9YANUtpIOdjGW14pS87bUBuOIoBILVWLFnS+MCX9T6MMf0VdPGq" crossorigin="anonymous">
-    <script type="module" src="js/custom.js"></script>
+
     <script type="module" src="js/optionsModal.js"></script>
 </head>
 
@@ -34,6 +34,7 @@
                                 <form action="#">
                                     <div class="form-group">
                                         <div class="input-group input-group-sm">
+
                                             <select class="output" id="regions">
                                                 <!-- Render regions -->
                                             </select>
@@ -43,13 +44,58 @@
                                     </div>
                                 </form>
                             </div>
-                            <div class="col-sm-2"></div>
                             <div class="col-sm-2">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
 
+                                            <select class="output" id="type_services">
+                                                <option>--- Wybierz ---</option>
+                                                <option>Montaż Int</option>
+                                                <option>Montaż TV</option>
+                                                <option>Serwis</option>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-2">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+
+                                            <select class="output" id="realization">
+                                                <option>Niezrealizowane</option>
+                                                <option>Zrealizowane</option>
+                                                <option>Zmienieone</option>
+                                            </select>
+
+
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                            <div class="col-sm-2">
+                                <form action="#">
+                                    <div class="form-group">
+                                        <div class="input-group input-group-sm">
+
+                                            <input type="text" class="output" placeholder="Wyszukaj" name="search"
+                                                id="searchBar">
+
+
+                                        </div>
+                                    </div>
+                                </form>
                             </div>
 
+
+
                             <div class="col-sm-2"><button class="btn btn-success" data-bs-toggle="modal"
-                                    data-bs-target="#addAssemblayModal">Dodaj montaż</button></div>
+                                    data-bs-target="#addAssemblayModal" onclick="load_data()">Dodaj montaż</button>
+                            </div>
 
                         </div>
                     </div>
@@ -66,8 +112,11 @@
                                     <th style="width:90px">OPCJE</th>
                                 </tr>
                             </thead>
-                            <tbody></tbody>
+                            <tbody id="table_content" onclick=""></tbody>
                         </table>
+                        <div id="pagination_link">
+
+                        </div>
                     </div>
                 </div>
                 <!-- Modal -->
@@ -150,6 +199,8 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.min.js"
         integrity="sha384-cVKIPhGWiC2Al4u+LWgxfKTRIcfu0JTxR+EQDz/bgldoEyl4H0zUF0QKbrJ0EcQF"
         crossorigin="anonymous"></script>
+    <!-- <script type="text/javascript" src="js/custom.js"></script> -->
+    <script type="module" src="js/custom.js"></script>
 </body>
 
 

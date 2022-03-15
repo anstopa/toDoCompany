@@ -14,7 +14,10 @@ $user = $_ENV['DB_USER'];
 $password = $_ENV['DB_PASSWORD'];
 $dbname = $_ENV['DB_NAME'];
 
+
+
 $db =  new mysqli($host, $user, $password, $dbname);
+$db2 = new PDO("mysql:host=$host; dbname=$dbname", "$user", "$password" );
 
 if ($db->connect_errno) {
     throw new RuntimeException('mysqli connection error: ' . $db->connect_error);
